@@ -8,6 +8,10 @@ embedded = true
 [build]
 automatically_update_urls_on_dev = true
 
+[auth]
+redirect_urls = [
+  "https://shopify-guper-frontend.vercel.app/auth/callback"
+]
 [webhooks]
 api_version = "2026-07"
 
@@ -35,11 +39,9 @@ api_version = "2026-07"
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "read_customers,read_orders,write_metaobject_definitions,write_metaobjects,write_products,write_discounts,read_script_tags,write_script_tags,read_products,write_customers"
 
-[auth]
-redirect_urls = [ "https://example.com/api/auth" ]
 
 [app_proxy]
-url = "https://bold-emphasis-involved-requirement.trycloudflare.com"
+url = "https://shopify-guper-frontend.vercel.app"
 subpath = "guper"
 prefix = "apps"
 

@@ -1,0 +1,13 @@
+query Input {
+  cart {
+    cost {
+      subtotalAmount {
+        amount
+        currencyCode
+      }
+    }
+    attribute(key: "guper_discount") {
+      value
+    }
+  }
+}

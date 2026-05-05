@@ -1,0 +1,19 @@
+api_version = "2026-04"
+
+[[extensions]]
+name = "t:name"
+handle = "guper-order-discount"
+type = "function"
+uid = "ed83470b-4839-4eaf-e908-419b3233f9259862da35"
+description = "t:description"
+
+  [[extensions.targeting]]
+  target = "purchase.order-discount.run"
+  input_query = "src/run.graphql"
+  export = "run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
+
+  

@@ -1,0 +1,145 @@
+<div id="guper-points-box" style="padding:12px; border:1px solid #ddd; border-radius:6px;">
+  Loading your cashback...
+</div>
+
+<script>
+(async () => {
+  try {
+    const customerId = {{ customer.id | json }};
+    const shop = "{{ shop.permanent_domain }}";
+    const currency = "{{ shop.currency }}";
+
+    if (!customerId) {
+      document.getElementById("guper-points-box").innerHTML =
+        "Login to see your cashback balance";
+      return;
+    }
+
+    const cart = await fetch('/cart.js').then(res => res.json());
+
+    if (!cart.items || cart.items.length === 0) {
+      document.getElementById("guper-points-box").innerHTML =
+        "Add items to cart to use cashback";
+      return;
+    }
+
+    // ✅ Create cart hash (detect changes)
+    const currentItemsHash = JSON.stringify(
+      cart.items.map(i => ({
+        id: i.id,
+        q: i.quantity
+      }))
+    );
+
+    // ❌ Skip if cart unchanged
+    if (cart.attributes?.guper_cart_hash === currentItemsHash) {
+      console.log("✅ Cart unchanged, skipping redeem");
+
+      const appliedDiscount = cart.attributes?.guper_discount || "0.00";
+
+      document.getElementById("guper-points-box").innerHTML = `
+        ✅ Cashback already applied: <strong>${currency} ${appliedDiscount}</strong>
+        <br><small>Discount will reflect on your order subtotal at checkout</small>
+      `;
+      return;
+    }
+
+    // ✅ Fetch balance
+    const balanceRes = await fetch(
+      `/apps/guper/api/customer-balance?shop=${shop}&shopifyCustomerId=${customerId}`
+    );
+    const balanceData = await balanceRes.json();
+
+    if (!balanceData.success) {
+      document.getElementById("guper-points-box").innerHTML =
+        "No cashback available";
+      return;
+    }
+
+    const available = balanceData.data?.available || 0;
+
+    if (available <= 0) {
+      document.getElementById("guper-points-box").innerHTML =
+        "No cashback available";
+      return;
+    }
+
+    // ✅ Calculate cart total
+    const cartTotal = cart.items.reduce((sum, i) => {
+      return sum + (i.price / 100) * i.quantity;
+    }, 0);
+
+    // ✅ Prepare items
+    const items = cart.items.map(i => ({
+      id: i.product_id.toString(),
+      name: i.product_title,
+      quantity: i.quantity,
+      price: i.price / 100
+    }));
+
+    // ✅ Call redeem API
+    const redeemRes = await fetch('/apps/guper/api/redeem-points', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop,
+        shopifyCustomerId: String(customerId),
+        orderId: "TEMP-" + Date.now(),
+        items
+      })
+    });
+
+    const redeemData = await redeemRes.json();
+    console.log("🔥 Auto Redeem:", redeemData);
+
+    if (!redeemData.success) {
+      document.getElementById("guper-points-box").innerHTML =
+        "Unable to apply cashback";
+      return;
+    }
+
+    let discount = redeemData.data?.discountAmount || 0;
+
+    // ✅ Cap discount
+    if (discount > cartTotal) discount = cartTotal;
+
+    // ✅ Save discount & cart hash to cart attributes
+    await fetch('/cart/update.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        attributes: {
+          guper_discount: discount.toFixed(2),
+          guper_cart_hash: currentItemsHash
+        }
+      })
+    });
+
+    // ✅ UI update
+    document.getElementById("guper-points-box").innerHTML = `
+      🎉 Cashback Applied: <strong>${currency} ${discount.toFixed(2)}</strong>
+      <br><small>Available balance: ${currency} ${available}</small>
+      <br><small>Discount will reflect on your order subtotal at checkout</small>
+    `;
+
+    // 🔁 Refresh
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+
+  } catch (err) {
+    console.error("❌ Guper error:", err);
+    document.getElementById("guper-points-box").innerHTML =
+      "Error applying cashback";
+  }
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Guper Balance Points",
+  "target": "section",
+  "settings": []
+}
+{% endschema %}

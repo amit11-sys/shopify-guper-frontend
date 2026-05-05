@@ -2,7 +2,7 @@
 
 client_id = "69a7c91d263bf9d9f71cfe63012e7ad9"
 name = "Guper Loyalty Cloud"
-application_url = "https://example.com"
+application_url = "https://shopify-guper-frontend.vercel.app"
 embedded = true
 
 [build]

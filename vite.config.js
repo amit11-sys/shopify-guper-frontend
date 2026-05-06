@@ -50,36 +50,35 @@ export default defineConfig({
 
   plugins: [reactRouter(), tsconfigPaths()],
 
-  build: {
-    assetsInlineLimit: 0,
-
-    // 👇 ADD THIS BLOCK
-    rollupOptions: {
-      external: [
-        "@shopify/shopify-api",
-        "@shopify/shopify-app-react-router",
-        "@shopify/api-codegen-preset",
-        "fs"
-      ],
-    },
-  },
-
-  optimizeDeps: {
-    include: ["@shopify/app-bridge-react"],
-
-    // 👇 ADD THIS
-    exclude: [
-      "@shopify/shopify-api",
-      "@shopify/shopify-app-react-router",
-      "@shopify/api-codegen-preset",
-    ],
-  },
-
-  // 👇 ADD THIS (VERY IMPORTANT)
-  ssr: {
+build: {
+  assetsInlineLimit: 0,
+  rollupOptions: {
     external: [
       "@shopify/shopify-api",
+      "@shopify/shopify-api/adapters/web-api", // 👈 ADD THIS
       "@shopify/shopify-app-react-router",
+      "@shopify/api-codegen-preset",
+      "fs"
     ],
   },
+},
+
+ optimizeDeps: {
+  include: ["@shopify/app-bridge-react"],
+  exclude: [
+    "@shopify/shopify-api",
+    "@shopify/shopify-api/adapters/web-api", // 👈 ADD THIS
+    "@shopify/shopify-app-react-router",
+    "@shopify/api-codegen-preset",
+  ],
+},
+
+  // 👇 ADD THIS (VERY IMPORTANT)
+ssr: {
+  external: [
+    "@shopify/shopify-api",
+    "@shopify/shopify-api/adapters/web-api", // 👈 ADD THIS
+    "@shopify/shopify-app-react-router",
+  ],
+},
 });

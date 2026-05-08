@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router";
+import { useLoaderData, Link } from "react-router";
 import { authenticate } from "../shopify.server";
 import db from "../db.server";
 
@@ -73,9 +73,9 @@ export default function Dashboard() {
             <p style={styles.notConnectedText}>
               Please enter your GUPER API credentials to activate the loyalty program.
             </p>
-            <a href="/app/settings" style={styles.connectBtn}>
+            <Link to="/app/settings" style={styles.connectBtn}>
               ⚙️ Settings — Connect GUPER Account
-            </a>
+            </Link>
           </div>
         </div>
       </s-page>

@@ -180,6 +180,15 @@ export default function Settings() {
         >
           {loading ? "Saving..." : "💾 Save & Verify Credentials"}
         </button>
+        <button
+  type="button"
+  onClick={() => {
+    alert("CLICK WORKING");
+    console.log("CLICK WORKING");
+  }}
+>
+  TEST BUTTON
+</button>
       </div>
 
       <div style={styles.card}>

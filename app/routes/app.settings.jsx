@@ -24,6 +24,7 @@ export const loader = async ({ request }) => {
 export default function Settings() {
   const { shop, savedAccount, savedApiKey, savedApiSecret, isActive } = useLoaderData();
   const API_BASE = import.meta.env.VITE_API_URL;
+  console.log("SETTINGS COMPONENT RENDERED");
   const navigate = useNavigate();
 
   const [account,      setAccount]      = useState(savedAccount);

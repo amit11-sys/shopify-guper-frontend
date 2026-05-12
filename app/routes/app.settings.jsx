@@ -34,28 +34,60 @@ export default function Settings() {
   const [active,       setActive]       = useState(isActive);
   const [disconnecting, setDisconnecting] = useState(false);
 
-  const handleSave = async () => {
-    setLoading(true);
-    setMessage(null);
-    try {
-      const res = await fetch(
-  `${API_BASE}/api/save-credentials`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ shop, account, apiKey, apiSecret }),
+ const handleSave = async () => {
+  console.log("1 HANDLE START");
+
+  setLoading(true);
+  setMessage(null);
+
+  try {
+    console.log("2 API_BASE", API_BASE);
+
+    const url = `${API_BASE}/api/save-credentials`;
+
+    console.log("3 URL", url);
+
+    const payload = { shop, account, apiKey, apiSecret };
+
+    console.log("4 PAYLOAD", payload);
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    console.log("5 RESPONSE RECEIVED", res);
+
+    const data = await res.json();
+
+    console.log("6 DATA", data);
+
+    if (data.success) {
+      setActive(true);
+      setMessage({
+        type: "success",
+        text: "✅ Credentials saved successfully!"
       });
-      const data = await res.json();
-      if (data.success) {
-        setActive(true);
-        setMessage({ type: "success", text: "✅ Credentials saved successfully!" });
-      } else {
-        setMessage({ type: "error", text: "❌ " + data.message });
-      }
-    } catch {
-      setMessage({ type: "error", text: "❌ Network error" });
+    } else {
+      setMessage({
+        type: "error",
+        text: "❌ " + data.message
+      });
     }
-    setLoading(false);
-  };
+  } catch (err) {
+    console.error("7 ERROR", err);
+
+    setMessage({
+      type: "error",
+      text: "❌ Network error"
+    });
+  }
+
+  console.log("8 HANDLE END");
+
+  setLoading(false);
+};
 
   // ✅ Disconnect handler
   const handleDisconnect = async () => {

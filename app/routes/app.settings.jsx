@@ -24,7 +24,6 @@ export const loader = async ({ request }) => {
 export default function Settings() {
   const { shop, savedAccount, savedApiKey, savedApiSecret, isActive } = useLoaderData();
   const API_BASE = import.meta.env.VITE_API_URL;
-  console.log("SETTINGS COMPONENT RENDERED");
   const navigate = useNavigate();
 
   const [account,      setAccount]      = useState(savedAccount);
@@ -35,60 +34,28 @@ export default function Settings() {
   const [active,       setActive]       = useState(isActive);
   const [disconnecting, setDisconnecting] = useState(false);
 
- const handleSave = async () => {
-  console.log("1 HANDLE START");
-
-  setLoading(true);
-  setMessage(null);
-
-  try {
-    console.log("2 API_BASE", API_BASE);
-
-    const url = `${API_BASE}/api/save-credentials`;
-
-    console.log("3 URL", url);
-
-    const payload = { shop, account, apiKey, apiSecret };
-
-    console.log("4 PAYLOAD", payload);
-
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    console.log("5 RESPONSE RECEIVED", res);
-
-    const data = await res.json();
-
-    console.log("6 DATA", data);
-
-    if (data.success) {
-      setActive(true);
-      setMessage({
-        type: "success",
-        text: "✅ Credentials saved successfully!"
+  const handleSave = async () => {
+    setLoading(true);
+    setMessage(null);
+    try {
+      const res = await fetch(
+  `${API_BASE}/api/save-credentials`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ shop, account, apiKey, apiSecret }),
       });
-    } else {
-      setMessage({
-        type: "error",
-        text: "❌ " + data.message
-      });
+      const data = await res.json();
+      if (data.success) {
+        setActive(true);
+        setMessage({ type: "success", text: "✅ Credentials saved successfully!" });
+      } else {
+        setMessage({ type: "error", text: "❌ " + data.message });
+      }
+    } catch {
+      setMessage({ type: "error", text: "❌ Network error" });
     }
-  } catch (err) {
-    console.error("7 ERROR", err);
-
-    setMessage({
-      type: "error",
-      text: "❌ Network error"
-    });
-  }
-
-  console.log("8 HANDLE END");
-
-  setLoading(false);
-};
+    setLoading(false);
+  };
 
   // ✅ Disconnect handler
   const handleDisconnect = async () => {
@@ -181,15 +148,6 @@ export default function Settings() {
         >
           {loading ? "Saving..." : "💾 Save & Verify Credentials"}
         </button>
-        <button
-  type="button"
-  onClick={() => {
-    alert("CLICK WORKING");
-    console.log("CLICK WORKING");
-  }}
->
-  TEST BUTTON
-</button>
       </div>
 
       <div style={styles.card}>

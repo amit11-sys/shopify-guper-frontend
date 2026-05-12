@@ -47,32 +47,4 @@ export default defineConfig({
   },
 
   plugins: [reactRouter(), tsconfigPaths()],
-
-  build: {
-    assetsInlineLimit: 0,
-    rollupOptions: {
-      external: [
-        "@shopify/shopify-api",
-        "@shopify/shopify-app-react-router",
-        "@shopify/api-codegen-preset",
-        "fs",
-      ],
-    },
-  },
-
-  optimizeDeps: {
-    include: ["@shopify/app-bridge-react"],
-    exclude: [
-      "@shopify/shopify-api",
-      "@shopify/shopify-app-react-router",
-      "@shopify/api-codegen-preset",
-    ],
-  },
-
-  ssr: {
-    external: [
-      "@shopify/shopify-api",
-      "@shopify/shopify-app-react-router",
-    ],
-  },
 });

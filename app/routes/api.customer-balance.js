@@ -17,11 +17,12 @@ export async function loader({ request }) {
 
   try {
     const response = await fetch(
-      `http://31.97.202.45:5000/api/loyalty/balance?shop=${session.shop}&shopifyCustomerId=${shopifyCustomerId}`
+      `${process.env.GUPER_BACKEND_URL}/loyalty/balance?shop=${session.shop}&shopifyCustomerId=${shopifyCustomerId}`
     );
     const data = await response.json();
     return Response.json(data);
   } catch (error) {
+    console.error("STEP1 ERROR:", error);
     return Response.json(
       { success: false, message: "Server error" },
       { status: 500 }

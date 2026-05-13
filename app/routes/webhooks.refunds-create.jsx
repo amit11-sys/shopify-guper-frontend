@@ -10,7 +10,7 @@ export async function action({ request }) {
   console.log("🔄 Refund webhook received for shop:", shop, "| Order ID:", orderId);
 
   try {
-    const res = await fetch("http://31.97.202.45:5000/api/loyalty/refund", {
+    const res = await fetch(`${process.env.GUPER_BACKEND_URL}/loyalty/refund`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

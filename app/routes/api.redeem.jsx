@@ -20,7 +20,7 @@ export async function action({ request }) {
 
     console.log(" Sending to Guper:", payload);
 
-    const res = await fetch("http://31.97.202.45:5000/api/loyalty/redeem", {
+    const res = await fetch(`${process.env.GUPER_BACKEND_URL}/loyalty/redeem`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

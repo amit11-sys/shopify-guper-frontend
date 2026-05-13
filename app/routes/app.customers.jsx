@@ -2,7 +2,7 @@ import { useLoaderData } from "react-router";
 import { authenticate } from "../shopify.server";
 import db from "../db.server";
 
-const GUPER_API = "http://31.97.202.45:5000";
+const GUPER_API = process.env.GUPER_BACKEND_URL;
 
 export const loader = async ({ request }) => {
   const { session } = await authenticate.admin(request);
@@ -15,7 +15,7 @@ export const loader = async ({ request }) => {
   }
 
   try {
-    const res = await fetch(`${GUPER_API}/api/merchant/customers/${shop}`);
+    const res = await fetch(`${GUPER_API}/merchant/customers/${shop}`);
     const json = await res.json();
 
     const customers = json.success ? (json.data?.customers || []) : [];

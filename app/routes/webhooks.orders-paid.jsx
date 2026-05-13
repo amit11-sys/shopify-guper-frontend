@@ -57,7 +57,7 @@ export async function action({ request }) {
     console.log("🔗 Connecting customer...");
 
     const connectRes = await fetch(
-      "http://31.97.202.45:5000/api/members/connect",
+      `${process.env.GUPER_BACKEND_URL}/members/connect`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -92,7 +92,7 @@ export async function action({ request }) {
 
     // 🟠 STEP 2: AWARD
     const awardRes = await fetch(
-      "http://31.97.202.45:5000/api/reward/award",
+      `${process.env.GUPER_BACKEND_URL}/reward/award`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -119,7 +119,7 @@ export async function action({ request }) {
       console.log("🔐 Confirming order...");
 
       const confirmRes = await fetch(
-        "http://31.97.202.45:5000/api/reward/confirm",
+        `${process.env.GUPER_BACKEND_URL}/reward/confirm`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

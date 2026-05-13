@@ -2,7 +2,7 @@ import { useLoaderData, Link } from "react-router";
 import { authenticate } from "../shopify.server";
 import db from "../db.server";
 
-const GUPER_API = "http://31.97.202.45:5000";
+const GUPER_API = process.env.GUPER_BACKEND_URL;
 
 
 export const loader = async ({ request }) => {
@@ -26,9 +26,9 @@ export const loader = async ({ request }) => {
 
   try {
     const [statsRes, statusRes, customersRes] = await Promise.all([
-      fetch(`${GUPER_API}/api/merchant/stats/${shop}`),
-      fetch(`${GUPER_API}/api/merchant/status/${shop}`),
-      fetch(`${GUPER_API}/api/merchant/customers/${shop}`),
+      fetch(`${GUPER_API}/merchant/stats/${shop}`),
+      fetch(`${GUPER_API}/merchant/status/${shop}`),
+      fetch(`${GUPER_API}/merchant/customers/${shop}`),
     ]);
 
     const statsJson = await statsRes.json();

@@ -1,7 +1,7 @@
 import { authenticate } from "../shopify.server";
 import db from "../db.server";
 
-const GUPER_API = "http://31.97.202.45:5000";
+const GUPER_API = process.env.GUPER_BACKEND_URL;
 
 // ✅ POST — credentials DB se delete karo + GUPER ko notify karo
 export const action = async ({ request }) => {

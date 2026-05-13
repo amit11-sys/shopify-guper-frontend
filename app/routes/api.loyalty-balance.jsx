@@ -8,7 +8,7 @@ export async function loader({ request }) {
 
   try {
     const res = await fetch(
-      `http://31.97.202.45:5000/api/loyalty/balance?shop=${shop}&shopifyCustomerId=${customerId}`
+      `${process.env.GUPER_BACKEND_URL}/loyalty/balance?shop=${shop}&shopifyCustomerId=${customerId}`
     );
 
     const data = await res.json();

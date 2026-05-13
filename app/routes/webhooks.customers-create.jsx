@@ -7,7 +7,7 @@ export async function action({ request }) {
   console.log("👤 New customer webhook received:", customer.email);
 
   try {
-    const res = await fetch("http://31.97.202.45:5000/api/members/connect", {
+    const res = await fetch(`${process.env.GUPER_BACKEND_URL}/members/connect`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

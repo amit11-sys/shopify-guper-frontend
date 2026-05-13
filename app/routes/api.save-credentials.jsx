@@ -9,7 +9,7 @@ export const action = async ({ request }) => {
 
   try {
     // Send to GUPER
-    const response = await fetch("http://31.97.202.45:5000/api/merchant/save", {
+    const response = await fetch(`${process.env.GUPER_BACKEND_URL}/merchant/save`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ shop, account, apiKey, apiSecret }),

@@ -8,11 +8,12 @@ export async function loader({ request }) {
 
   try {
     const response = await fetch(
-      `http://31.97.202.45:5000/api/merchant/status/${shop}`
+      `${process.env.GUPER_BACKEND_URL}/merchant/status/${shop}`
     );
     const data = await response.json();
     return Response.json(data);
   } catch (error) {
+    console.error("STEP1 ERROR:", error);
     return Response.json({ success: false, message: "Server error" }, { status: 500 });
   }
 }

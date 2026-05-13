@@ -6,7 +6,7 @@ export async function action({ request }) {
       identifierValue, customerName, customerPhone
     } = body;
 
-    const response = await fetch("http://31.97.202.45:5000/api/members/connect", {
+    const response = await fetch(`${process.env.GUPER_BACKEND_URL}/members/connect`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -18,6 +18,7 @@ export async function action({ request }) {
     const data = await response.json();
     return Response.json(data);
   } catch (error) {
+    console.error("STEP1 ERROR:", error);
     return Response.json({ success: false, message: "Server error" }, { status: 500 });
   }
 }

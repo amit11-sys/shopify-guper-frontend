@@ -23,7 +23,6 @@ export const loader = async ({ request }) => {
 
 export default function Settings() {
   const { shop, savedAccount, savedApiKey, savedApiSecret, isActive } = useLoaderData();
-
   const navigate = useNavigate();
 
   const [account,      setAccount]      = useState(savedAccount);
@@ -38,7 +37,8 @@ export default function Settings() {
     setLoading(true);
     setMessage(null);
     try {
-      const res = await fetch("/api/save-credentials", {
+      const res = await fetch(
+  '/api/save-credentials', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ shop, account, apiKey, apiSecret }),
@@ -62,7 +62,7 @@ export default function Settings() {
     setDisconnecting(true);
     setMessage(null);
     try {
-      const res  = await fetch("/api/disconnect", { method: "POST",
+      const res  = await fetch('/api/disconnect', { method: "POST",
         headers: { "Content-Type": "application/json" } });
       const data = await res.json();
       if (data.success) {

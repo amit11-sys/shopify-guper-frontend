@@ -8,7 +8,7 @@ export const action = async ({ request }) => {
   const { shop, account, apiKey, apiSecret } = body;
 
   console.log("🔥 Incoming request body:", body);
-  console.log("🏪 Shop:", shop);
+  console.log("🏪 this is Shop:", shop);
 
   try {
     const url = `${process.env.GUPER_BACKEND_URL}/merchant/save`;
